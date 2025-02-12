@@ -6,6 +6,7 @@ from sqlmodel import Session, select
 from contextlib import asynccontextmanager
 from .database import get_session, init_db
 from .models import Todo, TodoCreate,TodoUpdate
+from fastapi.middleware.cors import CORSMiddleware
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
@@ -19,6 +20,14 @@ async def lifespan(app:FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # read
